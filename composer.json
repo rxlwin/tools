@@ -12,7 +12,7 @@
     },
     "autoload": {
         "psr-4": {
-            "rxlwin\\tools\\params": "renxiaolong/tools/params"
+            "rxlwin\\tools\\": "renxiaolong/tools/"
         }
     }
 }
