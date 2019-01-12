@@ -1,7 +1,6 @@
 {
     "name": "renxiaolong/tools",
     "description": "一些常用的组件和基础类",
-    "type": "project",
     "authors": [
         {
             "name": "任小龙",
