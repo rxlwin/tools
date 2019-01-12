@@ -11,6 +11,10 @@
         "php": ">=7.0.0"
     },
     "autoload": {
+        "files":[
+            "arr/",
+            "params/"
+        ],
         "psr-4": {
             "rxlwin\\tools\\": "renxiaolong/tools/"
         }
