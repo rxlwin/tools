@@ -1,6 +1,7 @@
 {
     "name": "renxiaolong/tools",
     "description": "一些常用的组件和基础类",
+    "license":"MIT",
     "authors": [
         {
             "name": "任小龙",
@@ -11,6 +12,9 @@
         "php": ">=7.0.0"
     },
     "autoload": {
+        "files":[
+            "helpers.php"
+        ],
         "psr-4": {
             "rxlwin\\tools\\params\\": "params/",
             "rxlwin\\tools\\arr\\": "arr/"
