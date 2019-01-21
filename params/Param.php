@@ -7,7 +7,6 @@
  */
 
 
-
 namespace rxlwin\tools\params;
 
 /**
@@ -71,10 +70,12 @@ class Param
     {
         return $this->errorArray;
     }
+
     private function getParam()
     {
         return $this->param;
     }
+
     /**
      * 获取格式化后的处理规则
      * renxiaolong by 2019/1/10
@@ -145,13 +146,13 @@ class Param
     public function getFormatParam($param = null, $rules = null, $checkLevel = self::ERROR_LEVEL_HIGH)
     {
         $this->_init($param, $rules, true);
-        if (!empty($this->errorArray) && $checkLevel == self::ERROR_LEVEL_HIGH){
-            return $this->_returnRes($this->returnData);
+        if (!empty($this->errorArray) && $checkLevel == self::ERROR_LEVEL_HIGH) {
+            return $this->_returnRes($this->param);
         }
 
         $this->_checkParamByRule($checkLevel);
 
-        if (!empty($this->errorArray)){
+        if (!empty($this->errorArray)) {
             return $this->_returnRes($this->param);
         }
 
@@ -180,11 +181,11 @@ class Param
      */
     private function _setRule($rules, $errorFlag)
     {
-        if (is_array($rules)){
+        if (is_array($rules)) {
             $this->rules = $this->_getFormatRule($rules);
         } else {
-            if (is_null($rules)){
-                if (is_null($this->rules)){
+            if (is_null($rules)) {
+                if (is_null($this->rules)) {
                     $this->_addError('没有设置规则', $errorFlag);
                 }
             } else {
@@ -200,8 +201,8 @@ class Param
      */
     private function _setOriginParam($param)
     {
-        if (!is_null($param)){
-            if ($this->_checkParamFormat($param)){
+        if (!is_null($param)) {
+            if ($this->_checkParamFormat($param)) {
                 $this->originParam = $param;
             } else {
                 $this->_addError('传来的参数不是数组 ' . serialize($param));
@@ -216,11 +217,11 @@ class Param
      */
     private function _setFormatParam()
     {
-        if (!empty($this->errorArray) || is_null($this->rules)){
+        if (!empty($this->errorArray) || is_null($this->rules)) {
             return false;
         }
         $param = [];
-        foreach ($this->rules as $key => $rule){
+        foreach ($this->rules as $key => $rule) {
             $paramVal = isset($this->originParam[$rule['key']]) ? $this->originParam[$rule['key']] : $rule['default'];
             //格式化
             $paramVal = $this->_formatVal($paramVal, $rule['type']);
@@ -237,19 +238,19 @@ class Param
      */
     private function _checkParamByRule($checkLevel)
     {
-        if (!in_array($checkLevel,[self::ERROR_LEVEL_HIGH,self::ERROR_LEVEL_LOW])){
+        if (!in_array($checkLevel, [self::ERROR_LEVEL_HIGH, self::ERROR_LEVEL_LOW])) {
             $this->_addError('参数:checkLevel值传入错误');
             return false;
         }
-        if (is_null($this->rules)){
+        if (is_null($this->rules)) {
             return false;
         }
 
-        foreach ($this->rules as $key => $val){
+        foreach ($this->rules as $key => $val) {
             $waitCheckVal = $this->param[$key];
 
-            if (is_null($waitCheckVal)){
-                $this->_addError($key. ' 是必传参数,必须有值');
+            if (is_null($waitCheckVal)) {
+                $this->_addError($key . ' 是必传参数,必须有值');
                 if ($checkLevel == self::ERROR_LEVEL_HIGH) return false;//如果是高级别,遇错误即时返回,下同
             }
 
@@ -258,7 +259,7 @@ class Param
             if ($res === false && $checkLevel == self::ERROR_LEVEL_HIGH) return false;
         }
 
-        if (empty($this->errorArray)){
+        if (empty($this->errorArray)) {
             return true;
         } else {
             return false;
@@ -276,27 +277,27 @@ class Param
      */
     private function _checkValueByFunList($key, $val, $funList, $checkLevel)
     {
-        foreach ($funList as $fun){
+        foreach ($funList as $fun) {
             $funName = $fun[0];
-            $funParam = array_merge([$val],$fun[1]);
-            try{
-                $res = call_user_func_array([$this->baseValidateClassName,$funName],$funParam);
-                if (!is_bool($res)){
+            $funParam = array_merge([$val], $fun[1]);
+            try {
+                $res = call_user_func_array([$this->baseValidateClassName, $funName], $funParam);
+                if (!is_bool($res)) {
                     $this->_addError($res . ' ' . $funName);
                     if ($checkLevel == self::ERROR_LEVEL_HIGH) return false;
                 }
 
-                if ($res === false){
+                if ($res === false) {
                     $this->_addError('参数检验未通过: [' . $key . '=>' . $val . '] ' . $funName . '()');
                     if ($checkLevel == self::ERROR_LEVEL_HIGH) return false;
                 }
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
                 $this->_addError($e->getMessage());
                 if ($checkLevel == self::ERROR_LEVEL_HIGH) return false;
             }
         }
 
-        if (empty($this->errorArray)){
+        if (empty($this->errorArray)) {
             return true;
         } else {
             return false;
@@ -315,13 +316,13 @@ class Param
          * ['key','fun:[]','type','defaultValue','alias']
          */
         $res = [];
-        foreach ($rules as $rule){
-            if (!is_array($rule)){
+        foreach ($rules as $rule) {
+            if (!is_array($rule)) {
                 $this->_addError('规则条目不合法 ' . serialize($rule));
                 continue;
             }
             $key = $this->_getRuleKey($rule);
-            if (!is_null($key)){
+            if (!is_null($key)) {
                 $ruleKey = $this->_getRuleReturnName($rule, $key);
                 $res[$ruleKey] = [
                     'key' => $key,
@@ -341,14 +342,15 @@ class Param
      * @param $rule
      * @return null|string 如果正常返回string,如果不正常返回null
      */
-    private function _getRuleKey($rule){
+    private function _getRuleKey($rule)
+    {
         $key = isset($rule[0]) ? strval($rule[0]) : '';
         //数字不能开头
-        if (!$this->_checkVarAndFunName($key)){
+        if (!$this->_checkVarAndFunName($key)) {
             $key = '';
             $this->_addError($key . '规则中Key不合法');
         }
-        if (empty($key)){
+        if (empty($key)) {
             $key = null;
         }
 
@@ -368,7 +370,7 @@ class Param
          */
         $funInfo = isset($rule[1]) ? $rule[1] : '';
         $resFun = [];
-        if (empty($funInfo)){
+        if (empty($funInfo)) {
             $resFun = [];
         }
 
@@ -378,7 +380,7 @@ class Param
                 $fun = explode(':', $value);
                 if ($this->_checkVarAndFunName($fun[0])) {
                     $funName = $fun[0];
-                    if (isset($fun[1])){
+                    if (isset($fun[1])) {
                         $funParam = $this->_getFunParam($fun[1]);
                     } else {
                         $funParam = [];
@@ -402,11 +404,11 @@ class Param
     private function _getRuleType($rule)
     {
         $type = isset($rule[2]) ? strval($rule[2]) : null;
-        if (is_null($type)){
+        if (is_null($type)) {
             return $type;
         }
 
-        if (in_array($type, $this->availableType)){
+        if (in_array($type, $this->availableType)) {
             return $type;
         } else {
             $this->_addError($type . ' 属于未知类型');
@@ -438,8 +440,8 @@ class Param
     {
         $returnName = isset($rule[4]) ? strval($rule[4]) : '';
 
-        if (!empty($returnName)){
-            if ($this->_checkVarAndFunName($returnName)){
+        if (!empty($returnName)) {
+            if ($this->_checkVarAndFunName($returnName)) {
                 return $returnName;
             } else {
                 $this->_addError($returnName . ' 设置的返回键值不合法');
@@ -456,12 +458,13 @@ class Param
      * @param $var
      * @return bool
      */
-    private function _checkVarAndFunName($var){
-        if (intval($var) > 0){
+    private function _checkVarAndFunName($var)
+    {
+        if (intval($var) > 0) {
             return false;
         }
 
-        if (empty($var)){
+        if (empty($var)) {
             return false;
         }
 
@@ -474,10 +477,11 @@ class Param
      * @param $var
      * @return mixed|null
      */
-    private function _getFunParam($var){
-        try{
-            $res = json_decode($var,true);
-        }catch (\Exception $e){
+    private function _getFunParam($var)
+    {
+        try {
+            $res = json_decode($var, true);
+        } catch (\Exception $e) {
             $this->_addError(serialize($var) . '校验参数错误');
             $res = [];
         }
@@ -491,8 +495,9 @@ class Param
      * @param $msg
      * @param bool $flag
      */
-    private function _addError($msg, $flag = true){
-        if ($flag){
+    private function _addError($msg, $flag = true)
+    {
+        if ($flag) {
             array_push($this->errorArray, $msg);
         }
     }
@@ -503,8 +508,9 @@ class Param
      * @param $msg
      * @param bool $flag
      */
-    private function _addNotice($msg, $flag = true){
-        if ($flag){
+    private function _addNotice($msg, $flag = true)
+    {
+        if ($flag) {
             array_push($this->noticeArray, $msg);
         }
     }
@@ -517,7 +523,7 @@ class Param
      */
     private function _checkParamFormat($param)
     {
-        if (!is_array($param)){
+        if (!is_array($param)) {
             return false;
         } else {
             return true;
@@ -542,10 +548,10 @@ class Param
     private function _setParamDefault()
     {
         $param = $_SERVER;
-        if (isset($_POST)){
+        if (isset($_POST)) {
             $param += $_POST;
         }
-        if (isset($_GET)){
+        if (isset($_GET)) {
             $param += $_GET;
         }
         $this->originParam = $param;
@@ -561,11 +567,11 @@ class Param
     private function _formatVal($content, $type)
     {
         //变量如果是null,但是要求的类型不是null的不能初始化
-        if (is_null($content) && !is_null($type)){
+        if (is_null($content) && !is_null($type)) {
             return $content;
         }
 
-        switch ($type){
+        switch ($type) {
             case 'string':
                 $content = strval(urldecode($content));
                 break;
@@ -602,9 +608,9 @@ class Param
      */
     private function _formatArray($var)
     {
-        try{
+        try {
             $con = json_decode($var);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             //halt($e->getMessage());
             $this->_addError(serialize($var) . ' 格式化成数组时失败 ' . $e->getMessage());
             $con = null;
