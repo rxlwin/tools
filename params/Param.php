@@ -609,7 +609,11 @@ class Param
     private function _formatArray($var)
     {
         try {
-            $con = json_decode($var);
+            if (is_array($var)) {
+                $con = $var;
+            } else {
+                $con = json_decode($var);
+            }
         } catch (\Exception $e) {
             //halt($e->getMessage());
             $this->_addError(serialize($var) . ' 格式化成数组时失败 ' . $e->getMessage());
