@@ -371,7 +371,7 @@ class Param
         $funInfo = isset($rule[1]) ? $rule[1] : '';
         $resFun = [];
         if (empty($funInfo)) {
-            $resFun = [];
+            return $resFun;
         }
 
         if (is_string($funInfo)) {
