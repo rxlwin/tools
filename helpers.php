@@ -6,6 +6,13 @@
  * Time: 12:55
  */
 
+/**
+ * 打印函数
+ * @param $var
+ * @param bool $exit
+ * @param bool $echo
+ * @return false|string|string[]|null
+ */
 function p($var, $exit = false, $echo = false){
     static $i = 0;
     ob_start();
@@ -32,6 +39,10 @@ function p($var, $exit = false, $echo = false){
     return $output;
 }
 
+/**
+ * 计时函数
+ * @param $flag
+ */
 function t($flag){
     static $startTime = 0;
     static $lastTime = 0;

@@ -9,7 +9,8 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0"
+        "php": ">=7.0.0",
+        "ext-redis": "*"
     },
     "autoload": {
         "files":[
@@ -17,7 +18,8 @@
         ],
         "psr-4": {
             "rxlwin\\tools\\params\\": "params/",
-            "rxlwin\\tools\\arr\\": "arr/"
+            "rxlwin\\tools\\arr\\": "arr/",
+            "rxlwin\\tools\\": ""
         }
     }
 }

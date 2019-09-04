@@ -573,7 +573,7 @@ class Param
 
         switch ($type) {
             case 'string':
-                $content = strval(urldecode($content));
+                $content = strval($content);
                 break;
             case 'int':
                 $content = intval($content);
