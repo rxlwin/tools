@@ -20,7 +20,7 @@ function p($var, $exit = false, $echo = false){
     $output = ob_get_clean();
     $output = preg_replace('/\]\=\>\n(\s+)/m', '] => ', $output);
     if (PHP_SAPI == 'cli') {
-        $output = PHP_EOL . $output . PHP_EOL;
+        $output = PHP_EOL . $output;
     } else {
         if ($i%2 == 0){
             $color = '#ccffcc';
