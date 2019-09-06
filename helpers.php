@@ -43,10 +43,13 @@ function p($var, $exit = false, $echo = false){
  * 计时函数
  * @param $flag
  */
-function t($flag){
+function t($flag, $init = false){
     static $startTime = 0;
     static $lastTime = 0;
     $time = microtime(true);
+    if ($init === true) {
+        $startTime = 0;
+    }
     if ($startTime === 0){
         $startTime = $time;
         $str1 = '第一次';
