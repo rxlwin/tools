@@ -232,7 +232,7 @@ class Redis
         while ($i) {
             $res = $redis->setnx($lockKey, $value);
             if ($res) {
-                $redis->setTimeout($lockKey, 5);
+                $redis->expire($lockKey, 5);
                 return true;
             } else {
                 usleep(200000);
@@ -263,7 +263,7 @@ class Redis
         while ($i) {
             $res = $redis->setnx($lockKey, 1);
             if ($res) {
-                $redis->setTimeout($lockKey, $second);
+                $redis->expire($lockKey, $second);
                 echo ' 抢锁成功 ';
                 echo microtime(true);
                 return true;

@@ -95,7 +95,7 @@ class Param
 
     public function __construct($param = null, $rules = null)
     {
-        $this->baseValidateClassName = dirname(__CLASS__) . '\\' . $this->baseValidateClassName;
+        $this->baseValidateClassName = __NAMESPACE__ . '\\' . $this->baseValidateClassName;
         $this->_init($param, $rules, false);
     }
 
